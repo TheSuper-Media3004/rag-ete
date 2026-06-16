@@ -18,3 +18,22 @@ headers_to_split_on = [
 markdown_splitter = MarkdownHeaderTextSplitter(
     headers_to_split_on=headers_to_split_on
 )
+def create_rag_prompt(query, retrieved_documents):
+    context = "\n\n".join([doc['text'] for doc in retrieved_documents])
+    
+    prompt_template = f"""You are a helpful assistant that answers questions based on the provided context.
+
+Context:
+{context}
+
+Question: {query}
+
+Instructions:
+1. Answer the question using only information from the provided context
+2. If the context doesn't contain relevant information, say "I don't have enough information to answer this question"
+3. Cite specific parts of the context when possible
+4. Provide a concise, accurate answer
+
+Answer:"""
+    
+    return prompt_template
